@@ -1,21 +1,51 @@
-# Stentor
+# 🛡️ STENTOR — Live Forensic Triage & DFIR Appliance for Windows
 
 [![Platform Windows](https://img.shields.io/badge/platform-Windows-blue.svg)](https://www.microsoft.com/en-us/windows)
 [![PowerShell 5.1+](https://img.shields.io/badge/powershell-5.1%2B-blueviolet.svg)](https://learn.microsoft.com/powershell/)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Status: Beta](https://img.shields.io/badge/status-beta-orange.svg)]()
 
-**Stentor** es una herramienta de **triaje forense en vivo** para equipos Windows. Recolecta, en una sola ejecución y sin instalar nada, la evidencia más útil para responder preguntas como:
+> **Stentor** es una herramienta de **triaje forense en vivo** y respuesta a incidentes (*DFIR*) de alto rendimiento para entornos Windows. Permite a analistas SOC, Blue Teams e investigadores extraer en cuestión de minutos toda la evidencia volátil y persistente del sistema **sin instalar dependencias**, operando bajo una política estricta de **Zero-Footprint** desde almacenamiento externo (USB).
 
-- ¿Quién inició sesión en el equipo, cuándo y desde dónde?
-- ¿Hubo conexiones a internet? ¿A qué sitios y con qué programa?
-- ¿Hay indicios de **control remoto** (RDP, herramientas de acceso remoto, VPN o túneles, persistencia)?
+---
+
+## 🚀 ¿Por qué Stentor?
+
+Cuando ocurre un incidente, el tiempo de respuesta es crítico. **Stentor** consolida en un único ejecutable/script la recolección masiva de artefactos forenses para responder de forma contundente a las preguntas clave del análisis:
+
+- 👤 **Identidad y Accesos:** ¿Quién inició sesión, bajo qué tipo de *logon* (local, RDP, SMB), cuándo y desde qué IP de origen?
+- 🌐 **Conectividad e Historia de Red:** ¿Tuvo el equipo acceso a Internet? ¿Qué procesos generaron tráfico, qué dominios resolvió la caché DNS y qué transferencias en segundo plano (BITS) o redes Wi-Fi previas se registraron?
+- 🕹️ **Control Remoto y Persistencia:** Detección automática de herramientas de acceso remoto (AnyDesk, TeamViewer, RustDesk, etc.), túneles (ngrok, Chisel), adaptadores VPN, reglas de Firewall alteradas, tareas programadas y servicios maliciosos.
+- 📜 **PowerShell Forensics:** Análisis y filtrado inteligente del Event ID 4104, eliminando el ruido nativo del sistema para aislar descargas sospechosas, comandos codificados en Base64 o manipulaciones de Windows Defender.
+- ⚖️ **Cadena de Custodia Criptográfica:** Generación automática de un manifiesto SHA-256 (`MANIFIESTO_SHA256.csv`) que preserva la integridad de todas las evidencias extraídas para uso pericial o auditorías.
+
+---
 
 Está pensada para equipos de respuesta a incidentes, analistas SOC y personal de TI que necesitan un primer panorama rápido y ordenado, con un manifiesto de hashes para la cadena de custodia.
 
 > **Esto es triaje, no adquisición forense completa.** Se ejecuta sobre el sistema en vivo y, como cualquier herramienta de este tipo, deja huella en él (ver [Huella en el sistema](#-huella-en-el-sistema-y-buenas-prácticas)). No reemplaza la imagen de disco ni la captura de memoria cuando el caso las requiera.
 
 > ⚠️ **Autorización.** Recolecta datos personales (historial de navegación de todos los usuarios, cuentas, conexiones). Úsala solo con autorización formal del propietario del equipo y conforme a la normativa y las políticas de tu organización.
+
+---
+
+## 🔍 Cobertura Táctica de Artefactos
+
+| Categoría | Artefactos Recolectados | Propósito DFIR |
+| :--- | :--- | :--- |
+| **Registros EVTX** | Security, System, Application, PowerShell, RDP, Defender, Firewall, Sysmon, BITS, etc. | Análisis histórico de eventos del sistema. |
+| **Estado Volátil (Live)** | Conexiones TCP/UDP activas, Caché DNS, Procesos en ejecución con línea de comandos y hashes, Servicios y Puertos en escucha. | Identificación de C2 y sockets activos. |
+| **Red Histórica y SRUM** | Copia de `SRUDB.dat` (VSS), perfiles de red (NetworkList) y logs de BITS Client. | Determinación de consumo de red por app y tráficos pasados. |
+| **Persistencia y Ejecución** | Tareas programadas, claves de registro (SYSTEM/SOFTWARE), listado Prefetch y Amcache.hve. | Rastreo de ejecución de binarios sospechosos. |
+| **Navegadores y Remotos** | Copia limpia de bases de datos de Chrome/Edge/Firefox y logs de AnyDesk/TeamViewer. | Análisis de actividad del usuario e invasión remota. |
+
+---
+
+## ⚡ Características Clave
+
+- **Zero-Footprint Native:** Diseñado para ejecutarse desde una unidad USB o carpeta temporal, enviando los reportes a la misma ruta de origen sin alterar el host investigado.
+- **Resumen Consolidado (`RESUMEN.txt`):** Genera una vista ejecutiva lista para lectura rápida por parte del analista en campo antes de revisar los CSVs/EVTX detallados.
+- **Seguridad Forense:** No extrae datos de cuarentena de antivirus ni altera configuraciones existentes del sistema operativo.
 
 ---
 
