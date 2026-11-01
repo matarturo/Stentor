@@ -213,13 +213,16 @@ Triage_NOMBREPC_20261031_120000/
 └── artefactos/                        <-- Hives SYSTEM/SOFTWARE, SRUM (SRUDB.dat), Amcache
 ```
 
-### Cómo leer los resultados
+### 🔍 Cómo leer los resultados
 
-1. **`RESUMEN.txt`**: cobertura de logs, usuarios por tipo de logon e IP, software remoto/VPN, conexiones públicas, puertos en escucha, antivirus y PowerShell sospechoso.
-2. **`00_cobertura_logs.csv`**: antes de concluir que "no hubo X", comprueba que el log cubre la fecha del incidente. El log Security es circular y por defecto pequeño.
-3. **Tipos de logon relevantes:** `10` = RDP, `3` = red, `7` = desbloqueo, `11` = credenciales en caché.
-4. **Columna `Inicio`** en las conexiones públicas: hora en que Windows creó la conexión. Solo existe para conexiones **activas en el momento de la captura**.
-5. Las horas están en la **zona horaria del equipo** (indicada en la primera línea de `RESUMEN.txt`).
+1. **RESUMEN.txt**: Vista panorámica inicial que debes leer antes de abrir archivos individuales. Incluye cobertura de logs, usuarios por tipo de logon e IP, software remoto/VPN, conexiones públicas, puertos en escucha, antivirus y PowerShell sospechoso.
+2. **`00_cobertura_logs.csv`**: Antes de concluir que "no hubo actividad X", comprueba que el registro (log) cubre la fecha del incidente. Ten en cuenta que el log *Security* es de tipo circular y por defecto suele ser pequeño.
+3. **Tipos de logon relevantes**: Identifica el vector de acceso mediante los códigos de inicio de sesión: `10` = RDP (Escritorio Remoto), `3` = Red (SMB/WinRM/etc.), `7` = Desbloqueo, `11` = Credenciales en caché.
+4. **Columna "Inicio" en conexiones públicas (`live\conexiones_publicas.csv` y .txt)**: Muestra la hora exacta en que Windows creó la conexión. Esta marca de tiempo solo existe para conexiones activas en el momento de la captura en vivo.
+5. **Análisis de Bit Rate y Transferencias en Segundo Plano (`historico\bits_transferencias.csv`)**: Permite verificar si el equipo mantuvo comunicación o transferencias masivas de datos hacia URLs externas (los códigos de estado `0x0` indican éxito en la operación BITS).
+6. **Revisión de Script Blocks (`14b_PowerShell_4104_FILTRADO.csv`)**: Inspecciona los bloques de código PowerShell desglosados y limpios de ruido del sistema para ubicar descargas web, contenido codificado en Base64 o intentos de alteración de la seguridad.
+7. **Resumen de Usuarios (`01b_RESUMEN_usuarios_logon.csv`)**: Permite identificar rápidamente los inicios de sesión críticos (tipos 3 y 10) junto con sus respectivas direcciones IP de origen.
+8. **Zona horaria**: Todas las marcas temporales registradas en los reportes se encuentran expresadas en la zona horaria local del equipo investigado (indicada explícitamente en la primera línea de `RESUMEN.txt`).
 
 ---
 
