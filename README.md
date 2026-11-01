@@ -21,7 +21,7 @@ Está pensada para equipos de respuesta a incidentes, analistas SOC y personal d
 
 ## Elige cómo usarla
 
-| | **Binario `TriageEventos.exe`** | **Script `Stentor.ps1`** |
+| | **Binario `Stentor.exe`** | **Script `Stentor.ps1`** |
 |---|---|---|
 | **Para** | Administradores y soporte TI | Blue Team, Red Team, analistas DFIR |
 | **Ventaja** | Descargar y ejecutar; pide elevación (UAC) solo; no requiere cambiar la política de ejecución | Código legible y auditable; adaptable; se puede firmar |
