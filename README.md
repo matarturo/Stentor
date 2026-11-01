@@ -43,6 +43,19 @@ Releases/
 
 ---
 
+## 📥 Descarga y Métodos de Ejecución
+
+Elige el método de despliegue según el perfil del analista y los requerimientos del entorno:
+
+| Característica | Binario `Stentor.exe` | Script `Stentor.ps1` |
+| :--- | :--- | :--- |
+| **Perfil destinado** | Administradores y soporte TI | Blue Team, Red Team, analistas DFIR |
+| **Ventajas** | Descargar y ejecutar; pide elevación (UAC) automáticamente; no requiere alterar `ExecutionPolicy`. | Código 100% legible y auditable; personalizable y adaptable. |
+| **Inconvenientes** | Más propenso a alertas heurísticas de Antivirus/EDR (requiere recompilar para cambios). | Requiere consola de Administrador manual y `ExecutionPolicy Bypass`. |
+| **Requisito en el host** | Windows PowerShell 5.1 (usado internamente). | Windows PowerShell 5.1. |
+
+---
+
 ## 🚀 Inicio rápido
 
 ### Opción 1: Binario (TI y soporte)
