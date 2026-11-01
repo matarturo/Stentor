@@ -124,16 +124,14 @@ antigua y la más reciente disponibles.
    - Hives `SYSTEM` y `SOFTWARE`, `Amcache.hve` y el listado de archivos Prefetch (nombres y fechas, no los archivos).
 10. **Cadena de custodia:** `MANIFIESTO_SHA256.csv` con el SHA-256 de todo lo recolectado.
 
-
-
 ### Qué NO hace
 
 - No captura memoria RAM ni crea una imagen de disco.
-- No copia los hives `SAM`, `SECURITY` ni `NTUSER.DAT`, ni la MFT.
-- No copia archivos de cuarentena del antivirus (a propósito, para no exponer malware activo).
-- **No analiza** SRUM, navegadores, Amcache ni hives: los recolecta para analizarlos con herramientas externas (por ejemplo SrumECmd, AmcacheParser, Hindsight, DB Browser for SQLite, Registry Explorer).
-- No modifica la configuración del sistema: no activa auditoría ni habilita logs.
-
+- No copia los hives `SAM`, `SECURITY` ni `NTUSER.DAT`, ni la MFT (solo `SYSTEM`, `SOFTWARE` y `Amcache.hve`).
+- No copia archivos de cuarentena del antivirus: de las carpetas del antivirus solo toma logs de texto recientes y excluye las rutas de cuarentena, para no exponer malware activo.
+- **No analiza el contenido** de SRUM, de los historiales de navegador, de Amcache ni de los hives copiados: los recolecta para analizarlos con herramientas externas (por ejemplo SrumECmd, AmcacheParser, Hindsight, DB Browser for SQLite, Registry Explorer). Tampoco copia los archivos Prefetch: solo usa sus nombres y fechas.
+- No cambia la configuración del sistema: no activa auditoría ni habilita logs. Las huellas inevitables de la ejecución se describen en [Huella en el sistema](#-huella-en-el-sistema-y-buenas-prácticas).
+- No confirma por sí sola que el equipo estuviera expuesto a internet ni cuándo se conectó por primera vez: aporta evidencia y una línea de tiempo, y la exposición real depende de elementos externos (router, NAT, firewall perimetral).
 ---
 
 ## 📂 Estructura de la salida
