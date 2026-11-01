@@ -140,7 +140,8 @@ antigua y la más reciente disponibles.
 
 ```text
 Triage_NOMBREPC_20261031_120000/
-├── RESUMEN.txt                      <-- Empieza aquí
+Stentor_NOMBREPC_20261031_120000/
+├── RESUMEN.txt                      <-- Empieza aquí (ahora abre con "Desde cuándo")
 ├── transcript.txt                   <-- Transcripción de la consola (errores y avisos)
 ├── MANIFIESTO_SHA256.csv            <-- Hashes SHA-256 de toda la evidencia
 ├── 00_cobertura_logs.csv            <-- Cuánto historial hay realmente en cada log
@@ -149,14 +150,24 @@ Triage_NOMBREPC_20261031_120000/
 ├── 14b_PowerShell_4104_FILTRADO.csv
 ├── ...
 ├── evtx/                            <-- Copias de los .evtx originales
-├── live/                            <-- Estado volátil
-│   ├── conexiones_publicas.txt/.csv       (con hora de inicio de cada conexión)
+├── live/                            <-- Estado volátil (foto del momento de la ejecución)
+│   ├── conexiones_publicas.txt/.csv       (con hora de inicio de cada conexión activa)
 │   ├── sitios_conectados_ahora.txt
 │   ├── dominios_cache_dns.txt
 │   ├── puertos_escucha.csv
 │   ├── tcp_conexiones.csv, procesos.csv, servicios.csv, ...
+├── historico/                       <-- NUEVO: evidencia histórica de conectividad y exposición
+│   ├── LINEA_TIEMPO_conectividad.csv      (línea de tiempo consolidada con fecha y hora)
+│   ├── redes_conocidas.csv                (primera y última conexión a cada red)
+│   ├── accesos_desde_ip_publica.csv       (logons exitosos y fallidos, primera y última vez)
+│   ├── direcciones_ip_exposicion.csv      (IP del equipo y clase: privada, pública, IPv6 global)
+│   ├── perfiles_de_red_activos.csv
+│   ├── puertos_accesibles_y_regla.csv     (puertos expuestos y regla de entrada asociada)
+│   ├── firewall_cambios_reglas.csv
+│   ├── bits_transferencias.csv, windows_update_eventos.csv
+│   └── programas_red_prefetch.csv         (primera y última ejecución aproximada)
 ├── antivirus/                       <-- Estado de AV/EDR, Defender, exclusiones, logs
-└── artefactos/                      <-- SRUM, navegadores, herramientas remotas, hives, Amcache
+└── artefactos/                      <-- SRUM, navegadores, herramientas remotas, hives, AmcacheSRUM, navegadores, herramientas remotas, hives, Amcache
 ```
 
 ### Cómo leer los resultados
