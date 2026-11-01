@@ -1,0 +1,2 @@
+9ab88bea58e65de346dbd3ef3b6a5d3cf3f2efc9316cb29b75d1753ceb29d107  Stentor.exe
+630c070d74d08a970c6163fecc5f5a539515400407eebcb7f3b01e2da7d3b6ea  Stentor.ps1
