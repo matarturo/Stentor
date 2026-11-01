@@ -108,13 +108,23 @@ El tiempo de ejecución depende sobre todo del tamaño de los logs: unos pocos m
 4. **Control remoto y persistencia:** sesiones RDP y WinRM, servicios y tareas programadas nuevos, cuentas y grupos modificados, logs borrados, cambios de firewall, y herramientas de acceso remoto, VPN y túneles (instaladas, en ejecución o como servicios), con sus puertos en escucha.
 5. **PowerShell (eventos 4104):** exportación completa y versión filtrada sin el ruido del propio sistema y de la herramienta, con una sección de patrones sospechosos (descargas, comandos codificados, ejecución remota, cambios en Defender).
 6. **Red en vivo:** conexiones TCP/UDP, caché DNS, procesos con su línea de comandos, puertos en escucha, reglas de firewall de entrada permitidas, adaptadores de red, y **conexiones públicas con hora de inicio**, proceso, destino y nombre según la caché DNS.
-7. **Antivirus y EDR:** productos registrados en Windows Security Center, detecciones y **exclusiones** de Defender, eventos y logs de texto de otros fabricantes.
-8. **Artefactos:**
+7. **Conectividad histórica y exposición:** Además del estado en vivo, Stentor consolida evidencia **histórica** de conectividad (carpeta `historico\`):
+primera y última conexión a cada red, eventos de red y Wi-Fi, descargas BITS y Windows Update, cambios en
+reglas del firewall, accesos desde IP pública y ejecución de navegadores y herramientas remotas, en una
+línea de tiempo (`LINEA_TIEMPO_conectividad.csv`) con fecha y hora. `RESUMEN.txt` indica la evidencia más
+antigua y la más reciente disponibles.
+- "Más antigua" es la más antigua **disponible**, no necesariamente la primera conexión real.
+- Conectarse a una red no prueba acceso a internet; la exposición mostrada es **potencial**.
+- Para tráfico por aplicación con fechas, analiza `artefactos\SRUM\SRUDB.dat` con SrumECmd.
+8. **Antivirus y EDR:** productos registrados en Windows Security Center, detecciones y **exclusiones** de Defender, eventos y logs de texto de otros fabricantes.
+9. **Artefactos:**
    - Base **SRUM** (`SRUDB.dat`), copiada mediante instantánea VSS, para el análisis de uso de red por aplicación.
    - **Historiales de navegador** (Chrome, Edge, Firefox) de todos los usuarios, copiados para analizarlos fuera del equipo.
    - Logs propios de AnyDesk, TeamViewer, RustDesk, ScreenConnect y Quick Assist, si existen.
    - Hives `SYSTEM` y `SOFTWARE`, `Amcache.hve` y el listado de archivos Prefetch (nombres y fechas, no los archivos).
-9. **Cadena de custodia:** `MANIFIESTO_SHA256.csv` con el SHA-256 de todo lo recolectado.
+10. **Cadena de custodia:** `MANIFIESTO_SHA256.csv` con el SHA-256 de todo lo recolectado.
+
+
 
 ### Qué NO hace
 
