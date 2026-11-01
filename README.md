@@ -58,19 +58,17 @@ Está pensada para equipos de respuesta a incidentes, analistas SOC y personal d
 | **Inconvenientes** | Más propenso a bloqueos de antivirus/EDR; para modificarlo hay que recompilar | Requiere consola de administrador y `-ExecutionPolicy Bypass` (o script firmado) |
 | **Requisito en el equipo** | Windows PowerShell 5.1 (el binario lo usa internamente) | Windows PowerShell 5.1 |
 
-### Contenido del repositorio
+### 📁 Contenido del repositorio
 
 ```text
 Stentor/
-├── Stentor.ps1   <-- Script (usuarios avanzados)
-├── README.md
-├── LICENSE
-└── SHA256SUMS.txt              <-- Hashes de cada versión publicada
-
-Releases/
-└── Stentor.exe           <-- Binario (TI y soporte), junto con SHA256SUMS.txt
+├── LICENSE              <-- Licencia de código abierto (Apache 2.0)
+├── README.md            <-- Documentación principal e instrucciones del proyecto
+├── SECURITY.md          <-- Política de seguridad y reporte de vulnerabilidades
+├── SHA256SUMS.txt       <-- Manifiesto con los hashes SHA-256 oficiales (Stentor.exe y Stentor.ps1)
+├── Stentor.exe          <-- Binario ejecutable compilado (para TI, soporte y despliegue rápido)
+└── Stentor.ps1          <-- Script fuente en PowerShell 5.1 (para auditores y analistas DFIR)
 ```
-
 ---
 
 ## 📥 Descarga y Métodos de Ejecución
@@ -88,34 +86,48 @@ Elige el método de despliegue según el perfil del analista y los requerimiento
 
 ## 🚀 Inicio rápido
 
-### Opción 1: Binario (TI y soporte)
+### Opción 1: Binario (`Stentor.exe`) — Recomendado para TI y Soporte
 
-1. Descarga el ZIP de la última versión desde la página de **Releases** (contiene `Stentor.exe` y `SHA256SUMS.txt`).
-2. **Verifica el hash** antes de ejecutar:
-   ```powershell
-   Get-FileHash .\Stentor.exe -Algorithm SHA256
-   ```
-   Debe coincidir con el valor de `SHA256SUMS.txt`.
-3. Conecta una **unidad externa** (idealmente cifrada) con varios GB libres. No guardes la evidencia en el disco del equipo investigado.
-4. Abre **CMD o PowerShell como Administrador**.
-5. Ejecuta, indicando siempre la carpeta de salida:
-   ```cmd
-   Stentor.exe -Dias 30 -Salida E:\Evidencias_PC01
-   ```
-6. Al terminar, abre `RESUMEN.txt` dentro de la carpeta generada.
+1. **Descarga y Verifica la Integridad:**
+   * Obtén el ejecutable `Stentor.exe` y el manifiesto `SHA256SUMS.txt` desde la sección de **Releases** de este repositorio.
+   * Antes de ejecutar, calcula el hash SHA-256 del binario en la consola para validar la cadena de custodia:
+     ```powershell
+     Get-FileHash .\Stentor.exe -Algorithm SHA256
+     ```
+     *(El resultado obtenido debe coincidir exactamente con el hash asignado a `Stentor.exe` en `SHA256SUMS.txt`)*.
 
-> **Si el antivirus lo bloquea:** no lo desactives en el equipo investigado. Pide al equipo de seguridad que autorice el archivo por su hash (SHA-256). Es un comportamiento esperable en binarios generados con PS2EXE y en herramientas que leen artefactos del sistema.
+2. **Ejecución en campo desde unidad USB:**
+   * Copia `Stentor.exe` en tu unidad USB externa. Conéctala al equipo a investigar.
+   * **Método directo (Doble Clic):** Haz clic derecho sobre `Stentor.exe` y selecciona **"Ejecutar como administrador"**. La herramienta detectará automáticamente la letra de la unidad USB y creará la carpeta de resultados etiquetada en la raíz (ej. `E:\Triage_EQUIPO_FechaHora\`).
+   * **Método por Consola (CMD o PowerShell como Administrador):** Si prefieres ejecutarlo por línea de comandos o pasar parámetros personalizados sin depender de una letra fija, apunta a la raíz del dispositivo extraíble:
+     ```cmd
+     Stentor.exe -Dias 30 -Salida E:\
+     ```
+     *(Sustituye `E:\` por la letra que asigne temporalmente el sistema a tu unidad USB)*.
 
-### Opción 2: Script (usuarios avanzados)
+---
 
-Abre **PowerShell como Administrador** (preferiblemente con el script en una unidad externa, ej. `C:\`):
+### Opción 2: Script (`Stentor.ps1`) — Para Usuarios Avanzados y Auditoría
 
-```powershell
-Unblock-File .\Stentor.ps1
-powershell -ExecutionPolicy Bypass -File .\Stentor.ps1 -Dias 60 -Salida C:\Caso01
-```
+1. **Descarga y Valida el Script:**
+   * Descarga el archivo fuente `Stentor.ps1` y el manifiesto `SHA256SUMS.txt`.
+   * Valida su integridad criptográfica ejecutando en PowerShell:
+     ```powershell
+     Get-FileHash .\Stentor.ps1 -Algorithm SHA256
+     ```
+     *(Debe coincidir con la entrada correspondiente a `Stentor.ps1` dentro del archivo `SHA256SUMS.txt`)*.
 
-Ejecútalo con `powershell.exe` (Windows PowerShell 5.1). PowerShell 7 no está probado.
+2. **Ejecución desde unidad USB (PowerShell como Administrador):**
+   * Guarde el script directamente en la unidad USB externa. Abre una consola de PowerShell con privilegios elevados y navega hasta la unidad extraíble (ej. `E:`).
+   * Desbloquea la marca de zona web del archivo descargado:
+     ```powershell
+     Unblock-File .\Stentor.ps1
+     ```
+   * Ejecuta omitiendo la política de ejecución. Si omites el parámetro `-Salida` o especificas solo la raíz de la unidad, el script creará automáticamente el directorio de evidencias fechado en la raíz de la memoria USB:
+     ```powershell
+     powershell -ExecutionPolicy Bypass -File .\Stentor.ps1 -Dias 30 -Salida "E:\"
+     ```
+     *(Asegúrate de ejecutarlo estrictamente en Windows PowerShell 5.1 y reemplazar `E:\` por la letra asignada a tu USB)*.
 
 **Personalización.** Las listas de detección son variables dentro del script:
 
@@ -181,34 +193,24 @@ antigua y la más reciente disponibles.
 
 ```text
 Triage_NOMBREPC_20261031_120000/
-Stentor_NOMBREPC_20261031_120000/
-├── RESUMEN.txt                      <-- Empieza aquí (ahora abre con "Desde cuándo")
-├── transcript.txt                   <-- Transcripción de la consola (errores y avisos)
-├── MANIFIESTO_SHA256.csv            <-- Hashes SHA-256 de toda la evidencia
-├── 00_cobertura_logs.csv            <-- Cuánto historial hay realmente en cada log
-├── 01_logons_exitosos_4624.csv      <-- (los CSV de eventos solo se crean si hay eventos)
-├── 01b_RESUMEN_usuarios_logon.csv
-├── 14b_PowerShell_4104_FILTRADO.csv
+├── RESUMEN.txt                        <-- Reporte consolidado ejecutivo inicial
+├── transcript.txt                     <-- Registro técnico de la ejecución (consola)
+├── 00_cobertura_logs.csv              <-- Cuánto historial hay realmente disponible en cada log
+├── 01_logons_exitosos_4624.csv        <-- (los archivos CSV de eventos se generan dinámicamente)
+├── 01b_RESUMEN_usuarios_logon.csv     <-- Resumen consolidado de sesiones de usuario
+├── 14b_PowerShell_4104_FILTRADO.csv   <-- Bloques de script PowerShell limpios de ruido
 ├── ...
-├── evtx/                            <-- Copias de los .evtx originales
-├── live/                            <-- Estado volátil (foto del momento de la ejecución)
-│   ├── conexiones_publicas.txt/.csv       (con hora de inicio de cada conexión activa)
-│   ├── sitios_conectados_ahora.txt
-│   ├── dominios_cache_dns.txt
-│   ├── puertos_escucha.csv
-│   ├── tcp_conexiones.csv, procesos.csv, servicios.csv, ...
-├── historico/                       <-- NUEVO: evidencia histórica de conectividad y exposición
-│   ├── LINEA_TIEMPO_conectividad.csv      (línea de tiempo consolidada con fecha y hora)
-│   ├── redes_conocidas.csv                (primera y última conexión a cada red)
-│   ├── accesos_desde_ip_publica.csv       (logons exitosos y fallidos, primera y última vez)
-│   ├── direcciones_ip_exposicion.csv      (IP del equipo y clase: privada, pública, IPv6 global)
-│   ├── perfiles_de_red_activos.csv
-│   ├── puertos_accesibles_y_regla.csv     (puertos expuestos y regla de entrada asociada)
-│   ├── firewall_cambios_reglas.csv
-│   ├── bits_transferencias.csv, windows_update_eventos.csv
-│   └── programas_red_prefetch.csv         (primera y última ejecución aproximada)
-├── antivirus/                       <-- Estado de AV/EDR, Defender, exclusiones, logs
-└── artefactos/                      <-- SRUM, navegadores, herramientas remotas, hives, AmcacheSRUM, navegadores, herramientas remotas, hives, Amcache
+├── evtx/                              <-- Copias completas de los registros .evtx originales
+├── live/                              <-- Estado volátil actual (foto del momento de ejecución)
+│   ├── conexiones_publicas.txt/.csv         (con hora de creación de cada conexión activa)
+│   ├── sitios_conectados_ahora.txt          (dominios remotos activos)
+│   ├── dominios_cache_dns.txt               (caché DNS local)
+│   ├── puertos_escucha.csv                  (puertos abiertos en escucha)
+│   └── tcp_conexiones.csv, procesos.csv, servicios.csv, ...
+├── historico/                         <-- Evidencia histórica de conectividad y exposición
+│   └── redes_conocidas.csv                  (primera y última conexión a cada perfil de red)
+├── antivirus/                         <-- Estado de AV/EDR, Windows Defender, exclusiones y logs
+└── artefactos/                        <-- Hives SYSTEM/SOFTWARE, SRUM (SRUDB.dat), Amcache
 ```
 
 ### Cómo leer los resultados
