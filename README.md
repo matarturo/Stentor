@@ -28,8 +28,6 @@ Está pensada para equipos de respuesta a incidentes, analistas SOC y personal d
 | **Inconvenientes** | Más propenso a bloqueos de antivirus/EDR; para modificarlo hay que recompilar | Requiere consola de administrador y `-ExecutionPolicy Bypass` (o script firmado) |
 | **Requisito en el equipo** | Windows PowerShell 5.1 (el binario lo usa internamente) | Windows PowerShell 5.1 |
 
-Ambos hacen exactamente lo mismo: el binario es el script empaquetado con [PS2EXE](https://github.com/MScholtes/PS2EXE).
-
 ### Contenido del repositorio
 
 ```text
